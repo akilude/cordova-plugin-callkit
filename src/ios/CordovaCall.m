@@ -577,6 +577,9 @@ BOOL enableDTMF = NO;
     NSDictionary *payloadDict = payload.dictionaryPayload[@"aps"];
     NSLog(@"[objC] didReceiveIncomingPushWithPayload: %@", payloadDict);
 
+    NSString *call_id = payload.dictionaryPayload[@"apn_call_id"];
+    NSString *call_name = payload.dictionaryPayload[@"apn_call_name"];
+
     NSString *message = payloadDict[@"alert"];
     NSLog(@"[objC] received VoIP message: %@", message);
     
@@ -588,11 +591,9 @@ BOOL enableDTMF = NO;
     [results setObject:data forKey:@"extra"];
     
     @try {
-        NSError* error;
-        NSDictionary* json = [NSJSONSerialization JSONObjectWithData:[data dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
-        
-        NSObject* caller = [json objectForKey:@"Caller"];
-        NSArray* args = [NSArray arrayWithObjects:[caller valueForKey:@"Username"], [caller valueForKey:@"ConnectionId"], nil];
+        NSMutableArray *args = [[NSMutableArray alloc] init];
+        [args addObject:call_name];
+        [args addObject:call_id];
         
         CDVInvokedUrlCommand* newCommand = [[CDVInvokedUrlCommand alloc] initWithArguments:args callbackId:@"" className:self.VoIPPushClassName methodName:self.VoIPPushMethodName];
         

@@ -23,10 +23,8 @@ Once the plugin is installed, the only thing that you need to do is to push a VO
 
 ```javascript
 {
-  Caller: {
-    Username: 'Display Name',
-    ConnectionId: 'Unique Call ID'
-  }
+  apn_call_id:"1234567891011", // unique call id
+  apn_call_name:"DisplayName" // caller name
 }
 ```
 
