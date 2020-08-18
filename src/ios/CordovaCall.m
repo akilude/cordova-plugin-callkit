@@ -587,9 +587,27 @@ BOOL enableDTMF = NO;
     NSLog(@"[objC] received data: %@", data);
     
     NSMutableDictionary* results = [NSMutableDictionary dictionaryWithCapacity:2];
-    [results setObject:message forKey:@"function"];
-    [results setObject:data forKey:@"extra"];
+    @try {
+        [results setObject:message forKey:@"function"];
+    }
+    @catch (NSException *exception) {
+       NSLog(@"[objC] error: %@", exception.reason);
+    }
+    @finally {
+        
+    }
+
     
+    @try {
+        [results setObject:data forKey:@"extra"];
+    }
+    @catch (NSException *exception) {
+       NSLog(@"[objC] error: %@", exception.reason);
+    }
+    @finally {
+
+    }
+
     @try {
         NSMutableArray *args = [[NSMutableArray alloc] init];
         [args addObject:call_name];
