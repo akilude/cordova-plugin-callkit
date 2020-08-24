@@ -53,6 +53,13 @@
             </array>
         </config-file>
 
+        <config-file target="*-Debug.plist" parent="aps-environment">
+         <string>development</string>
+        </config-file>
+        <config-file target="*-Release.plist" parent="aps-environment">
+            <string>production</string>
+        </config-file>
+
         <header-file src="src/ios/CordovaCall.h" />
 
         <source-file src="src/ios/CordovaCall.m" />
