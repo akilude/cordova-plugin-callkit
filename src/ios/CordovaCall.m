@@ -176,6 +176,7 @@ BOOL enableDTMF = NO;
     CDVPluginResult* pluginResult = nil;
     NSString* callName = [command.arguments objectAtIndex:0];
     NSString* callId = hasId?[command.arguments objectAtIndex:1]:callName;
+    NSString* call_type = [command.arguments objectAtIndex:2];
     NSUUID *callUUID = [[NSUUID alloc] init];
 
     if (hasId) {
@@ -187,7 +188,12 @@ BOOL enableDTMF = NO;
         CXHandle *handle = [[CXHandle alloc] initWithType:CXHandleTypePhoneNumber value:callId];
         CXCallUpdate *callUpdate = [[CXCallUpdate alloc] init];
         callUpdate.remoteHandle = handle;
-        callUpdate.hasVideo = hasVideo;
+        if([call_type isEqualToString:@"video"]){
+            callUpdate.hasVideo = YES;
+        }else{
+            callUpdate.hasVideo = NO;
+        }
+        
         callUpdate.localizedCallerName = callName;
         callUpdate.supportsGrouping = NO;
         callUpdate.supportsUngrouping = NO;
@@ -579,12 +585,20 @@ BOOL enableDTMF = NO;
 
     NSString *call_id = payload.dictionaryPayload[@"apn_call_id"];
     NSString *call_name = payload.dictionaryPayload[@"apn_call_name"];
+    
 
     NSString *message = payloadDict[@"alert"];
     NSLog(@"[objC] received VoIP message: %@", message);
     
     NSString *data = payload.dictionaryPayload[@"data"];
     NSLog(@"[objC] received data: %@", data);
+
+    NSString *call_type = @"video"; 
+    
+    if([ [data valueForKey:@"audio"] isEqualToString:@"true"]){
+        call_type = @"audio"; 
+    }
+        
     
     NSMutableDictionary* results = [NSMutableDictionary dictionaryWithCapacity:2];
     @try {
@@ -612,6 +626,7 @@ BOOL enableDTMF = NO;
         NSMutableArray *args = [[NSMutableArray alloc] init];
         [args addObject:call_name];
         [args addObject:call_id];
+        [args addObject:call_type];
         
         CDVInvokedUrlCommand* newCommand = [[CDVInvokedUrlCommand alloc] initWithArguments:args callbackId:@"" className:self.VoIPPushClassName methodName:self.VoIPPushMethodName];
         
