@@ -578,7 +578,7 @@ BOOL enableDTMF = NO;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.VoIPPushCallbackId];
 }
 
-- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(NSString *)type
+- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(NSString *)type withCompletionHandler:(void (^)(void))completion
 {
     NSDictionary *payloadDict = payload.dictionaryPayload[@"aps"];
     NSLog(@"[objC] didReceiveIncomingPushWithPayload: %@", payloadDict);
@@ -598,7 +598,6 @@ BOOL enableDTMF = NO;
     if([ [data valueForKey:@"audio"] isEqualToString:@"true"]){
         call_type = @"audio"; 
     }
-        
     
     NSMutableDictionary* results = [NSMutableDictionary dictionaryWithCapacity:2];
     @try {
@@ -639,6 +638,7 @@ BOOL enableDTMF = NO;
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:results];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.VoIPPushCallbackId];
+        completion();
     }
 }
 
