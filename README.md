@@ -28,7 +28,7 @@ Once the plugin is installed, the only thing that you need to do is to push a VO
 }
 ```
 
-If you need more parameters, just add them into the structure to your liking. Basically, the `Username` property is mapped to the name displayed on the call screen and the `ConnectionId` property is mapped to the unique ID for the incoming call (value is optional but property must be provided in the object).
+If you need more parameters, just add them into the structure to your liking. Basically, the `apn_call_name` property is mapped to the name displayed on the call screen and the `aon_call_id` property is mapped to the unique ID for the incoming call (value is optional but property must be provided in the object).
 
 You guys might be wondering, so far it is all about iOS, how about Android? As for Android, no modifications are required for the original plugin since background notifications can handle everything.
 
